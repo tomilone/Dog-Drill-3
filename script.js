@@ -1,13 +1,20 @@
 function getDogImages(breed){
     fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
-    .then(response => response.json())
-    .then(responseJson =>
-      displayImages(responseJson,breed))
-    .catch(error => 'Something went wrong! Try again later!')
-  }
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+    }
+    throw new Error(response.statusText);
+})
+
+  .then(responseJson => 
+      displayResults(responseJson))
+  .catch(error => alert('Breed Not Found'));
+
+}
+    
   
   function displayImages(responseJson, x){
-  console.log(responseJson)
   $('.results').html('');
   $('.results').append(`<img src='${responseJson.message}' class='img-results' alt='random dogs'>`)
   
@@ -24,7 +31,6 @@ function getDogImages(breed){
   }
   
 function appRunner(){
-    console.log('App is loaded, waiting on submit')
     formWatch();
 }
 
